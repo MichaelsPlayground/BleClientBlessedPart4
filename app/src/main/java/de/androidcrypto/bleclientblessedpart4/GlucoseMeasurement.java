@@ -1,4 +1,4 @@
-package de.androidcrypto.bleclientblessedpart3;
+package de.androidcrypto.bleclientblessedpart4;
 
 import com.welie.blessed.BluetoothBytesParser;
 
@@ -10,8 +10,8 @@ import static com.welie.blessed.BluetoothBytesParser.FORMAT_SFLOAT;
 import static com.welie.blessed.BluetoothBytesParser.FORMAT_UINT8;
 import static com.welie.blessed.BluetoothBytesParser.FORMAT_SINT16;
 import static com.welie.blessed.BluetoothBytesParser.FORMAT_UINT16;
-import static de.androidcrypto.bleclientblessedpart3.GlucoseMeasurementUnit.MiligramPerDeciliter;
-import static de.androidcrypto.bleclientblessedpart3.GlucoseMeasurementUnit.MmolPerLiter;
+import static de.androidcrypto.bleclientblessedpart4.GlucoseMeasurementUnit.MiligramPerDeciliter;
+import static de.androidcrypto.bleclientblessedpart4.GlucoseMeasurementUnit.MmolPerLiter;
 
 public class GlucoseMeasurement implements Serializable {
 

@@ -1,4 +1,4 @@
-package de.androidcrypto.bleclientblessedpart3;
+package de.androidcrypto.bleclientblessedpart4;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -116,6 +116,14 @@ class BluetoothHandler {
     private final Handler handler = new Handler();
     private int currentTimeCounter = 0;
 
+    // new in part 4
+    public void connectToAddress(String peripheralMacAddress) {
+        Timber.i("BH connectToAddress: %s", peripheralMacAddress);
+        central.stopScan();
+        BluetoothPeripheral bluetoothPeripheral = central.getPeripheral(peripheralMacAddress);
+        central.connectPeripheral(bluetoothPeripheral, peripheralCallback);
+    }
+
     // new in part 2
     public void connectToHeartRateServiceDevice() {
         startScanHrs();
@@ -152,6 +160,9 @@ class BluetoothHandler {
 
     // Callback for peripherals
     private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
+
+
+
         @Override
         public void onServicesDiscovered(@NotNull BluetoothPeripheral peripheral) {
             // Request a higher MTU, iOS always asks for 185

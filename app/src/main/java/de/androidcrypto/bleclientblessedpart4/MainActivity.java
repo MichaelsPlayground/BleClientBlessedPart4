@@ -1,6 +1,4 @@
-package de.androidcrypto.bleclientblessedpart3;
-
-import static com.welie.blessed.BluetoothBytesParser.FORMAT_UINT8;
+package de.androidcrypto.bleclientblessedpart4;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -24,7 +22,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.welie.blessed.BluetoothBytesParser;
 import com.welie.blessed.BluetoothCentralManager;
 import com.welie.blessed.BluetoothPeripheral;
 
@@ -40,6 +37,15 @@ import java.util.Objects;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
+
+    // new in part 4
+    Button listDevices;
+
+    /**
+     * Return Intent extra
+     */
+    public static String EXTRA_DEVICE_ADDRESS = "device_address";
+    String macAddressFromScan = ""; // will get filled by Intent from DeviceScanActivity
 
     // new in part 2
     Button connectToHrsDevices, disconnectFromHrsDevice;
@@ -74,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
 
         // new in part 3
         batteryLevel = findViewById(R.id.etMainBatteryLevel);
+
+        // new in part 4
+        listDevices = findViewById(R.id.btnMainListDevices);
 
         measurementValue = findViewById(R.id.bloodPressureValue);
 
@@ -152,6 +161,44 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // new in part 4
+        listDevices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, DeviceListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // new in part 4
+        // receive the address from DeviceListOwnActivity, if we receive data run the connection part
+        Intent incommingIntent = getIntent();
+        Bundle extras = incommingIntent.getExtras();
+        if (extras != null) {
+            initBluetoothHandler();
+            macAddressFromScan = extras.getString(EXTRA_DEVICE_ADDRESS); // retrieve the data using keyName
+            System.out.println("Main received data: " + macAddressFromScan);
+            try {
+                if (!macAddressFromScan.equals("")) {
+                    Log.i("Main", "selected MAC: " + macAddressFromScan);
+                    connectedDevice.setText(macAddressFromScan);
+                    if (bluetoothHandler != null) {
+                        if (macAddressFromScan.length() > 16) {
+                            Log.i("Main", "connect to macAddress: " + macAddressFromScan);
+                            bluetoothHandler.connectToAddress(macAddressFromScan);
+                        } else {
+                            Log.i("Main", "macAddressFromScan !> 16");
+                        }
+                    } else {
+                        Log.i("Main", "bluetoothHandler == null");
+                    }
+                }
+            } catch (NullPointerException e) {
+                // do nothing, there are just no data
+                Log.i("Main", "null pointer exception: " + e.toString());
+            }
+        }
     }
 
     @SuppressLint("MissingPermission")

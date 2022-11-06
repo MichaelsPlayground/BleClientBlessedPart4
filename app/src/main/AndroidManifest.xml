@@ -25,6 +25,13 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-    </application>
+        <!--  android:theme="@android:style/Theme.Holo.Dialog" -->
+        <activity
+            android:name=".DeviceListActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="select device"
+
+        />
+</application>
 
 </manifest>
