@@ -12,9 +12,13 @@ Client part 1 (Setup a Android Bluetooth Low Energy client part 1): https://gith
 
 Client part 2 (Enhance a Android Bluetooth Low Energy client part 2): https://github.com/AndroidCrypto/BleClientBlessedPart2
 
+Client part 3 (Add a Battery Service listener to  a Android Bluetooth Low Energy client): https://github.com/AndroidCrypto/BleClientBlessedPart3
+
 Server part 1 (Setup your own Android Bluetooth Low Energy Server part 1): https://github.com/AndroidCrypto/BleServerBlessedOriginal
 
 Server part 2 (Enhance your own Android Bluetooth Low Energy Server part 2): https://github.com/AndroidCrypto/BleServerBlessedPart2
+
+Server part 3 (Add a Battery Service to your own Android Bluetooth Low Energy Server): https://github.com/AndroidCrypto/BleServerBlessedPart3
 
 The library in use (BLESSED-ANDROID) is available here: https://github.com/weliem/blessed-android 
 provided by **Martijn van Welie**.
