@@ -16,70 +16,6 @@
         android:text="This is the Bluetooth Low Energy client based on the blessed-android library."
         android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/btnMainConnectToHeartRateServiceDevices"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="16dp"
-        android:text="connect to devices with a Heart Rate Service" />
-
-    <Button
-        android:id="@+id/btnMainListDevices"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="16dp"
-        android:text="list devices" />
-
-    <Button
-        android:id="@+id/btnMainDisconnectFromHeartRateServiceDevice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="16dp"
-        android:enabled="false"
-        android:text="disconnect from device with a Heart Rate Service" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etMainConnectedDeviceDecoration"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:hint="connected device"
-        android:visibility="visible"
-        app:boxCornerRadiusBottomEnd="5dp"
-        app:boxCornerRadiusBottomStart="5dp"
-        app:boxCornerRadiusTopEnd="5dp"
-        app:boxCornerRadiusTopStart="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etMainConnectedDevice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:focusable="false"
-            android:text="disconnected"
-            android:textSize="14sp"
-            android:visibility="visible"
-            tools:ignore="KeyboardInaccessibleWidget" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -90,34 +26,42 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/btnMainEnableAllSubscriptions"
+                android:id="@+id/btnMainConnectToHeartRateServiceDevices"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="16dp"
-                android:enabled="false"
-                android:text="enable all subscriptions" />
+                android:text="connect to devices with a Heart Rate Service" />
 
             <Button
-                android:id="@+id/btnMainDisableAllSubscriptions"
+                android:id="@+id/btnMainListDevices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:text="list devices" />
+
+            <Button
+                android:id="@+id/btnMainDisconnectFromHeartRateServiceDevice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="16dp"
                 android:enabled="false"
-                android:text="disable all subscriptions" />
+                android:text="disconnect from device with a Heart Rate Service" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etMainBatteryLevelLayout"
+                android:id="@+id/etMainConnectedDeviceDecoration"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:hint="Battery Level on server"
+                android:hint="connected device"
                 android:visibility="visible"
                 app:boxCornerRadiusBottomEnd="5dp"
                 app:boxCornerRadiusBottomStart="5dp"
@@ -128,87 +72,150 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMainBatteryLevel"
+                    android:id="@+id/etMainConnectedDevice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:focusable="false"
-                    android:text="waiting for the device"
+                    android:text="disconnected"
                     android:textSize="14sp"
                     android:visibility="visible"
                     tools:ignore="KeyboardInaccessibleWidget" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etMainCurrentTimeLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:hint="Current time on server"
-                android:visibility="visible"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMainCurrentTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:focusable="false"
-                    android:text="waiting for a data transfer"
-                    android:textSize="14sp"
-                    android:visibility="visible"
-                    tools:ignore="KeyboardInaccessibleWidget" />
-            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etMainHeartRateLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:hint="Heart rate"
-                android:visibility="visible"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMainHeartRate"
+                <Button
+                    android:id="@+id/btnMainEnableAllSubscriptions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:focusable="false"
-                    android:text="waiting for heart rate measurements"
-                    android:textSize="14sp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:enabled="false"
+                    android:text="enable all subscriptions" />
+
+                <Button
+                    android:id="@+id/btnMainDisableAllSubscriptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:enabled="false"
+                    android:text="disable all subscriptions" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etMainBatteryLevelLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="Battery Level on server"
                     android:visibility="visible"
-                    tools:ignore="KeyboardInaccessibleWidget" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/bloodPressureValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="48dp"
-                android:text="waiting for other measurements..."
-                android:textAlignment="center"
-                android:textSize="24sp" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etMainBatteryLevel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:focusable="false"
+                        android:text="waiting for the device"
+                        android:textSize="14sp"
+                        android:visibility="visible"
+                        tools:ignore="KeyboardInaccessibleWidget" />
+                </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etMainCurrentTimeLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="Current time on server"
+                    android:visibility="visible"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etMainCurrentTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:focusable="false"
+                        android:text="waiting for a data transfer"
+                        android:textSize="14sp"
+                        android:visibility="visible"
+                        tools:ignore="KeyboardInaccessibleWidget" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etMainHeartRateLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="Heart rate"
+                    android:visibility="visible"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etMainHeartRate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:focusable="false"
+                        android:text="waiting for heart rate measurements"
+                        android:textSize="14sp"
+                        android:visibility="visible"
+                        tools:ignore="KeyboardInaccessibleWidget" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/bloodPressureValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="48dp"
+                    android:text="waiting for other measurements..."
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
