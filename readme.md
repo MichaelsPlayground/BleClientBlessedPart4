@@ -1,6 +1,28 @@
-# Bluetooth Low Energy Client with BLESSED-ANDROID library (part 3)
+# Bluetooth Low Energy Client with BLESSED-ANDROID library (part 4)
 
-This is the part 3 BLE Client example using the library in https://github.com/weliem/blessed-android.
+For reconnecting:
+```plaintext
+https://github.com/weliem/blessed-android/issues/61
+In the meantime, I've been using this horrible hack in order to reconnect to the same peripheral:
+public void startScanningPeripherals()
+{
+    if (connectedPeripheral != null)
+    {
+        connectedPeripheral.clearServicesCache();
+        try
+        {
+            Thread.sleep(250);
+        }
+        catch (InterruptedException e)
+        {}
+        connectedPeripheral = null;
+        central = new BluetoothCentral(context, bluetoothCentralCallback, new Handler(Looper.getMainLooper()));
+    }
+    central.scanForPeripherals();
+}
+```
+
+This is the part 4 BLE Client example using the library in https://github.com/weliem/blessed-android.
 
 The code is changed to get some more information from the server. The changes took place in the 
 BluetoothHandler.java file to connect to the sample server app (BleServerBlessedOriginal) and the 
