@@ -20,14 +20,20 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -37,7 +43,13 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.switchmaterial.SwitchMaterial;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * It lists any paired devices and
@@ -46,7 +58,7 @@ import java.util.Set;
  * Activity in the result Intent.
  */
 //public class DeviceListActivity extends Activity {
-public class DeviceListActivity extends AppCompatActivity {
+public class DeviceLeListActivity extends AppCompatActivity {
 
     /**
      * Tag for Log
@@ -62,6 +74,15 @@ public class DeviceListActivity extends AppCompatActivity {
      * Member fields
      */
     private BluetoothAdapter mBtAdapter;
+    private BluetoothLeScanner mBtLeScanner;
+    private boolean scanning;
+    // Stops scanning after 5 seconds.
+    private static final long SCAN_PERIOD = 5000; // 5000 = 5 seconds
+    private Handler handler = new Handler();
+    List<String> subject_list; // for temporary list
+    SwitchMaterial scanFilterEnabled;
+    // this is the UUID for filtering
+    private static final UUID HEART_RATE_SERVICE_UUID = UUID.fromString("0000180D-0000-1000-8000-00805f9b34fb");
 
     /**
      * Newly discovered devices
@@ -74,8 +95,9 @@ public class DeviceListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_list);
+        setContentView(R.layout.activity_le_device_list);
 
+        scanFilterEnabled = findViewById(R.id.swDeviceLeListScanFilter);
         progressBar = findViewById(R.id.pbList);
 
         // Set result CANCELED in case the user backs out
@@ -87,7 +109,9 @@ public class DeviceListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 progressBar.setIndeterminate(false);
                 progressBar.setVisibility(View.VISIBLE);
-                doDiscovery();
+                //doDiscovery();
+                subject_list = new ArrayList<String>();
+                scanLeDevice();
                 v.setVisibility(View.GONE);
             }
         });
@@ -118,6 +142,8 @@ public class DeviceListActivity extends AppCompatActivity {
 
         // Get the local Bluetooth adapter
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+        // and initialize the LE Scanner
+        mBtLeScanner  = mBtAdapter.getBluetoothLeScanner();
 
         // Get a set of currently paired devices
         Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
@@ -171,6 +197,97 @@ public class DeviceListActivity extends AppCompatActivity {
         mBtAdapter.startDiscovery();
     }
 
+    @SuppressLint("MissingPermission")
+    private void scanLeDevice() {
+        Log.i("DeviceLeList", "scanLeDevice");
+        setProgressBarIndeterminateVisibility(true);
+        setTitle("scanning");
+        // Turn on sub-title for new devices
+        findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
+
+        if (!scanning) {
+            // Stops scanning after a predefined scan period.
+            handler.postDelayed(new Runnable() {
+                @SuppressLint("MissingPermission")
+                @Override
+                public void run() {
+                    scanning = false;
+                    mBtLeScanner.stopScan(leScanCallback);
+                    progressBar.setIndeterminate(true);
+                    progressBar.setVisibility(View.GONE);
+                }
+            }, SCAN_PERIOD);
+
+            scanning = true;
+
+            /**
+             * notice on using a ScanFilter: testing with a real device (Samsung Galaxy A4 with
+             * Android 5.0.1 does not run a filtered service uuid so you need to run the scan with
+             * UNCHECKED switch
+             */
+
+            if (scanFilterEnabled.isChecked()) {
+                // using a scan filter - here for fixed Heart Rate Service UUID
+                List<ScanFilter> leScanFilter = new ArrayList<ScanFilter>();
+                ScanFilter scanFilter = new ScanFilter.Builder()
+                        .setServiceUuid(new ParcelUuid(HEART_RATE_SERVICE_UUID))
+                        .build();
+                leScanFilter.add(scanFilter);
+                ScanSettings leScanSettings = new ScanSettings.Builder()
+                        .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build();
+                mBtLeScanner.startScan(leScanFilter, leScanSettings, leScanCallback);
+            } else {
+                // no scan filter
+                mBtLeScanner.startScan(leScanCallback);
+            }
+
+        } else {
+            scanning = false;
+            mBtLeScanner.stopScan(leScanCallback);
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    // Device scan callback.
+    private ScanCallback leScanCallback =
+            new ScanCallback() {
+                @Override
+                public void onScanResult(int callbackType, ScanResult result) {
+                    super.onScanResult(callbackType, result);
+                    String deviceInfos =
+                            "name: " + result.getDevice().getName()
+                                    + "\ntype: " + getBTDeviceType(result.getDevice())
+                                    + "\naddress: " + result.getDevice().getAddress();
+                    // todo make a switch if all devices or only named devices get added
+                    //if (result.getDevice().getName() != null) {
+
+                    // this code is for avoiding duplicates in the listview
+                    subject_list.add(deviceInfos);
+                    HashSet<String> hashSet = new HashSet<String>();
+                    hashSet.addAll(subject_list);
+                    subject_list.clear();
+                    subject_list.addAll(hashSet);
+                    mNewDevicesArrayAdapter.clear();
+                    mNewDevicesArrayAdapter.addAll(hashSet);
+                    mNewDevicesArrayAdapter.notifyDataSetChanged();
+                    //scannedDevicesArrayAdapter.add(deviceInfos);
+
+                    System.out.println("\nMAC: " + result.getDevice().getAddress());
+                    List<ParcelUuid> uuids = result.getScanRecord().getServiceUuids();
+                    if (uuids != null) {
+                        int uuidsSize = uuids.size();
+                        System.out.println("Found UUIDs: " + uuidsSize);
+                        for (int i = 0; i < uuidsSize; i++) {
+                            System.out.println("UUID " + i + " : " + uuids.get(i).getUuid().toString());
+                        }
+                    } else {
+                        System.out.println("no UUID(s) available");
+                    }
+                    System.out.println("------------------------------");
+                    //}
+                }
+            };
+
     /**
      * The on-click listener for all devices in the ListViews
      */
@@ -187,7 +304,7 @@ public class DeviceListActivity extends AppCompatActivity {
             String address = info.substring(info.length() - 17);
 
             // Create the Intent and include the MAC address
-            Intent intent = new Intent(DeviceListActivity.this, MainActivity.class);
+            Intent intent = new Intent(DeviceLeListActivity.this, MainActivity.class);
             intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
             startActivity(intent);
             finish();
@@ -225,5 +342,33 @@ public class DeviceListActivity extends AppCompatActivity {
             }
         }
     };
+
+    /**
+     * get the type of Bluetooth device
+     */
+
+    @SuppressLint("MissingPermission")
+    private String getBTDeviceType(BluetoothDevice d){
+        String type = "";
+
+        switch (d.getType()){
+            case BluetoothDevice.DEVICE_TYPE_CLASSIC:
+                type = "DEVICE_TYPE_CLASSIC";
+                break;
+            case BluetoothDevice.DEVICE_TYPE_DUAL:
+                type = "DEVICE_TYPE_DUAL";
+                break;
+            case BluetoothDevice.DEVICE_TYPE_LE:
+                type = "DEVICE_TYPE_LE";
+                break;
+            case BluetoothDevice.DEVICE_TYPE_UNKNOWN:
+                type = "DEVICE_TYPE_UNKNOWN";
+                break;
+            default:
+                type = "unknown...";
+        }
+
+        return type;
+    }
 
 }

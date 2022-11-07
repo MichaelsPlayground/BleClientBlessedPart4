@@ -30,8 +30,12 @@
             android:name=".DeviceListActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="select device"
-
         />
+        <activity
+            android:name=".DeviceLeListActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="select device"
+            />
 </application>
 
 </manifest>
