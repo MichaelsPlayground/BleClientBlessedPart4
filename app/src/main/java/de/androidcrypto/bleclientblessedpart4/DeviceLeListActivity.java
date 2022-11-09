@@ -57,7 +57,7 @@ import java.util.UUID;
  * by the user, the MAC address of the device is sent back to the parent
  * Activity in the result Intent.
  */
-//public class DeviceListActivity extends Activity {
+
 public class DeviceLeListActivity extends AppCompatActivity {
 
     /**
@@ -76,9 +76,9 @@ public class DeviceLeListActivity extends AppCompatActivity {
     private BluetoothAdapter mBtAdapter;
     private BluetoothLeScanner mBtLeScanner;
     private boolean scanning;
+    private Handler handler = new Handler();
     // Stops scanning after 5 seconds.
     private static final long SCAN_PERIOD = 5000; // 5000 = 5 seconds
-    private Handler handler = new Handler();
     List<String> subject_list; // for temporary list
     SwitchMaterial scanFilterEnabled;
     // this is the UUID for filtering
@@ -109,7 +109,6 @@ public class DeviceLeListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 progressBar.setIndeterminate(false);
                 progressBar.setVisibility(View.VISIBLE);
-                //doDiscovery();
                 subject_list = new ArrayList<String>();
                 scanLeDevice();
                 v.setVisibility(View.GONE);
@@ -131,14 +130,6 @@ public class DeviceLeListActivity extends AppCompatActivity {
         ListView newDevicesListView = findViewById(R.id.new_devices);
         newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
         newDevicesListView.setOnItemClickListener(mDeviceClickListener);
-
-        // Register for broadcasts when a device is discovered
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        this.registerReceiver(mReceiver, filter);
-
-        // Register for broadcasts when discovery has finished
-        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        this.registerReceiver(mReceiver, filter);
 
         // Get the local Bluetooth adapter
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -170,32 +161,11 @@ public class DeviceLeListActivity extends AppCompatActivity {
             mBtAdapter.cancelDiscovery();
         }
 
-        // Unregister broadcast listeners
-        this.unregisterReceiver(mReceiver);
     }
 
     /**
      * Start device discover with the BluetoothAdapter
      */
-    @SuppressLint("MissingPermission")
-    private void doDiscovery() {
-        //Log.d(TAG, "doDiscovery()");
-        Log.i("DeviceList", "disconnectFromHrsDevice");
-        // Indicate scanning in the title
-        setProgressBarIndeterminateVisibility(true);
-        setTitle("scanning");
-
-        // Turn on sub-title for new devices
-        findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
-
-        // If we're already discovering, stop it
-        if (mBtAdapter.isDiscovering()) {
-            mBtAdapter.cancelDiscovery();
-        }
-
-        // Request discover from BluetoothAdapter
-        mBtAdapter.startDiscovery();
-    }
 
     @SuppressLint("MissingPermission")
     private void scanLeDevice() {
@@ -258,9 +228,6 @@ public class DeviceLeListActivity extends AppCompatActivity {
                             "name: " + result.getDevice().getName()
                                     + "\ntype: " + getBTDeviceType(result.getDevice())
                                     + "\naddress: " + result.getDevice().getAddress();
-                    // todo make a switch if all devices or only named devices get added
-                    //if (result.getDevice().getName() != null) {
-
                     // this code is for avoiding duplicates in the listview
                     subject_list.add(deviceInfos);
                     HashSet<String> hashSet = new HashSet<String>();
@@ -270,21 +237,6 @@ public class DeviceLeListActivity extends AppCompatActivity {
                     mNewDevicesArrayAdapter.clear();
                     mNewDevicesArrayAdapter.addAll(hashSet);
                     mNewDevicesArrayAdapter.notifyDataSetChanged();
-                    //scannedDevicesArrayAdapter.add(deviceInfos);
-
-                    System.out.println("\nMAC: " + result.getDevice().getAddress());
-                    List<ParcelUuid> uuids = result.getScanRecord().getServiceUuids();
-                    if (uuids != null) {
-                        int uuidsSize = uuids.size();
-                        System.out.println("Found UUIDs: " + uuidsSize);
-                        for (int i = 0; i < uuidsSize; i++) {
-                            System.out.println("UUID " + i + " : " + uuids.get(i).getUuid().toString());
-                        }
-                    } else {
-                        System.out.println("no UUID(s) available");
-                    }
-                    System.out.println("------------------------------");
-                    //}
                 }
             };
 
@@ -312,45 +264,12 @@ public class DeviceLeListActivity extends AppCompatActivity {
     };
 
     /**
-     * The BroadcastReceiver that listens for discovered devices and changes the title when
-     * discovery is finished
-     */
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @SuppressLint("MissingPermission")
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-
-            // When discovery finds a device
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Get the BluetoothDevice object from the Intent
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                // If it's already paired, skip it, because it's been listed already
-                if (device != null && device.getBondState() != BluetoothDevice.BOND_BONDED) {
-                    mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-                }
-                // When discovery is finished, change the Activity title
-            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                progressBar.setIndeterminate(true);
-                progressBar.setVisibility(View.GONE);
-                setTitle("select device");
-                if (mNewDevicesArrayAdapter.getCount() == 0) {
-                    // String noDevices = getResources().getText(R.string.none_found).toString();
-                    String noDevices = "none device found";
-                    mNewDevicesArrayAdapter.add(noDevices);
-                }
-            }
-        }
-    };
-
-    /**
      * get the type of Bluetooth device
      */
 
     @SuppressLint("MissingPermission")
     private String getBTDeviceType(BluetoothDevice d){
         String type = "";
-
         switch (d.getType()){
             case BluetoothDevice.DEVICE_TYPE_CLASSIC:
                 type = "DEVICE_TYPE_CLASSIC";
@@ -367,7 +286,6 @@ public class DeviceLeListActivity extends AppCompatActivity {
             default:
                 type = "unknown...";
         }
-
         return type;
     }
 
