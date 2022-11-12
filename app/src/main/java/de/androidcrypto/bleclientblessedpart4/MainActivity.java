@@ -170,15 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        /*
-        listDevices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, DeviceListActivity.class);
-                startActivity(intent);
-            }
-        });
-*/
+
         // new in part 4
         // receive the address from DeviceListOwnActivity, if we receive data run the connection part
         Intent incommingIntent = getIntent();
