@@ -160,7 +160,6 @@ public class DeviceLeListActivity extends AppCompatActivity {
             // Make sure we're not doing discovery anymore
             mBtAdapter.cancelDiscovery();
         }
-
     }
 
     /**
@@ -288,5 +287,4 @@ public class DeviceLeListActivity extends AppCompatActivity {
         }
         return type;
     }
-
 }
