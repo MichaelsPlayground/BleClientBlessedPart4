@@ -162,7 +162,6 @@ class BluetoothHandler {
     private final BluetoothPeripheralCallback peripheralCallback = new BluetoothPeripheralCallback() {
 
 
-
         @Override
         public void onServicesDiscovered(@NotNull BluetoothPeripheral peripheral) {
             // Request a higher MTU, iOS always asks for 185
@@ -333,7 +332,7 @@ class BluetoothHandler {
             Timber.i("new MTU set: %d", mtu);
         }
 
-        private void sendMeasurement(@NotNull Intent intent, @NotNull BluetoothPeripheral peripheral ) {
+        private void sendMeasurement(@NotNull Intent intent, @NotNull BluetoothPeripheral peripheral) {
             intent.putExtra(MEASUREMENT_EXTRA_PERIPHERAL, peripheral.getAddress());
             context.sendBroadcast(intent);
         }
@@ -358,7 +357,7 @@ class BluetoothHandler {
         private void writeGetAllGlucoseMeasurements(@NotNull BluetoothPeripheral peripheral) {
             byte OP_CODE_REPORT_STORED_RECORDS = 1;
             byte OPERATOR_ALL_RECORDS = 1;
-            final byte[] command = new byte[] {OP_CODE_REPORT_STORED_RECORDS, OPERATOR_ALL_RECORDS};
+            final byte[] command = new byte[]{OP_CODE_REPORT_STORED_RECORDS, OPERATOR_ALL_RECORDS};
             peripheral.writeCharacteristic(GLUCOSE_SERVICE_UUID, GLUCOSE_RECORD_ACCESS_POINT_CHARACTERISTIC_UUID, command, WriteType.WITH_RESPONSE);
         }
     };
@@ -371,7 +370,7 @@ class BluetoothHandler {
             Timber.i("connected to '%s'", peripheral.getName());
             Intent intent = new Intent(BLUETOOTHHANDLER_PERIPHERAL_MAC_ADDRESS);
             String returnString = peripheral.getAddress() + " (" +
-            peripheral.getName() + ")";
+                    peripheral.getName() + ")";
             intent.putExtra(BLUETOOTHHANDLER_PERIPHERAL_MAC_ADDRESS_EXTRA, returnString);
             context.sendBroadcast(intent);
         }
@@ -483,7 +482,7 @@ class BluetoothHandler {
             public void run() {
                 central.scanForPeripheralsWithServices(new UUID[]{HEART_RATE_SERVICE_UUID});
             }
-        },1000);
+        }, 1000);
     }
 
 

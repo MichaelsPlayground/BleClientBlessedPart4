@@ -1,46 +1,22 @@
 # Bluetooth Low Energy Client with BLESSED-ANDROID library (part 4)
 
-For reconnecting:
-```plaintext
-https://github.com/weliem/blessed-android/issues/61
-In the meantime, I've been using this horrible hack in order to reconnect to the same peripheral:
-public void startScanningPeripherals()
-{
-    if (connectedPeripheral != null)
-    {
-        connectedPeripheral.clearServicesCache();
-        try
-        {
-            Thread.sleep(250);
-        }
-        catch (InterruptedException e)
-        {}
-        connectedPeripheral = null;
-        central = new BluetoothCentral(context, bluetoothCentralCallback, new Handler(Looper.getMainLooper()));
-    }
-    central.scanForPeripherals();
-}
-```
-
 This is the part 4 BLE Client example using the library in https://github.com/weliem/blessed-android.
 
-The code is changed to get some more information from the server. The changes took place in the 
-BluetoothHandler.java file to connect to the sample server app (BleServerBlessedOriginal) and the 
-MainActivity.java.
+**The code is changed to find and connect to nearby BLE devices.**
 
 Recent parts of the client and the server apps:
 
-Client part 1 (Setup a Android Bluetooth Low Energy client part 1): https://github.com/AndroidCrypto/BleClientBlessedOriginal
+**Client part 1 (Setup a Android Bluetooth Low Energy client part 1)**: https://github.com/AndroidCrypto/BleClientBlessedOriginal
 
-Client part 2 (Enhance a Android Bluetooth Low Energy client part 2): https://github.com/AndroidCrypto/BleClientBlessedPart2
+**Client part 2 (Enhance a Android Bluetooth Low Energy client part 2)**: https://github.com/AndroidCrypto/BleClientBlessedPart2
 
-Client part 3 (Add a Battery Service listener to  a Android Bluetooth Low Energy client): https://github.com/AndroidCrypto/BleClientBlessedPart3
+**Client part 3 (Add a Battery Service listener to  a Android Bluetooth Low Energy client)**: https://github.com/AndroidCrypto/BleClientBlessedPart3
 
-Server part 1 (Setup your own Android Bluetooth Low Energy Server part 1): https://github.com/AndroidCrypto/BleServerBlessedOriginal
+**Server part 1 (Setup your own Android Bluetooth Low Energy Server part 1)**: https://github.com/AndroidCrypto/BleServerBlessedOriginal
 
-Server part 2 (Enhance your own Android Bluetooth Low Energy Server part 2): https://github.com/AndroidCrypto/BleServerBlessedPart2
+**Server part 2 (Enhance your own Android Bluetooth Low Energy Server part 2)**: https://github.com/AndroidCrypto/BleServerBlessedPart2
 
-Server part 3 (Add a Battery Service to your own Android Bluetooth Low Energy Server): https://github.com/AndroidCrypto/BleServerBlessedPart3
+**Server part 3 (Add a Battery Service to your own Android Bluetooth Low Energy Server)**: https://github.com/AndroidCrypto/BleServerBlessedPart3
 
 The library in use (BLESSED-ANDROID) is available here: https://github.com/weliem/blessed-android 
 provided by **Martijn van Welie**.
@@ -82,6 +58,28 @@ dependencyResolutionManagement {
 You may notice that the AndroidManifest.xml does not contain any Bluetooth related permissions - they are all 
 set within the library but you are asked to grant some runtime permissions during startup (depending on the Android  
 SDK version running on your Smartphone the server is running on).
+
+For reconnecting:
+```plaintext
+https://github.com/weliem/blessed-android/issues/61
+In the meantime, I've been using this horrible hack in order to reconnect to the same peripheral:
+public void startScanningPeripherals()
+{
+    if (connectedPeripheral != null)
+    {
+        connectedPeripheral.clearServicesCache();
+        try
+        {
+            Thread.sleep(250);
+        }
+        catch (InterruptedException e)
+        {}
+        connectedPeripheral = null;
+        central = new BluetoothCentral(context, bluetoothCentralCallback, new Handler(Looper.getMainLooper()));
+    }
+    central.scanForPeripherals();
+}
+```
 
 Notice regarding a bug in the blessed-library's log system: in BluetoothServer.java you will notice an 
 "error" on line 185 ("Cannot resolve method 'plant(timber.log.Timber.DebugTree)'"):

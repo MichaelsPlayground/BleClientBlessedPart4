@@ -13,8 +13,10 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -94,10 +96,10 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(batteryLevelDataReceiver, new IntentFilter(BluetoothHandler.BLUETOOTHHANDLER_BATTERY_LEVEL));
 
         registerReceiver(locationServiceStateReceiver, new IntentFilter((LocationManager.MODE_CHANGED_ACTION)));
-        registerReceiver(bloodPressureDataReceiver, new IntentFilter( BluetoothHandler.MEASUREMENT_BLOODPRESSURE ));
-        registerReceiver(temperatureDataReceiver, new IntentFilter( BluetoothHandler.MEASUREMENT_TEMPERATURE ));
-        registerReceiver(heartRateDataReceiver, new IntentFilter( BluetoothHandler.MEASUREMENT_HEARTRATE ));
-        registerReceiver(pulseOxDataReceiver, new IntentFilter( BluetoothHandler.MEASUREMENT_PULSE_OX ));
+        registerReceiver(bloodPressureDataReceiver, new IntentFilter(BluetoothHandler.MEASUREMENT_BLOODPRESSURE));
+        registerReceiver(temperatureDataReceiver, new IntentFilter(BluetoothHandler.MEASUREMENT_TEMPERATURE));
+        registerReceiver(heartRateDataReceiver, new IntentFilter(BluetoothHandler.MEASUREMENT_HEARTRATE));
+        registerReceiver(pulseOxDataReceiver, new IntentFilter(BluetoothHandler.MEASUREMENT_PULSE_OX));
         registerReceiver(weightDataReceiver, new IntentFilter(BluetoothHandler.MEASUREMENT_WEIGHT));
         registerReceiver(glucoseDataReceiver, new IntentFilter(BluetoothHandler.MEASUREMENT_GLUCOSE));
 
@@ -228,13 +230,12 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isBluetoothEnabled() {
         BluetoothAdapter bluetoothAdapter = getBluetoothManager().getAdapter();
-        if(bluetoothAdapter == null) return false;
+        if (bluetoothAdapter == null) return false;
 
         return bluetoothAdapter.isEnabled();
     }
 
-    private void initBluetoothHandler()
-    {
+    private void initBluetoothHandler() {
         // BluetoothHandler.getInstance(getApplicationContext());
         // new in part 2
         bluetoothHandler = BluetoothHandler.getInstance(getApplicationContext());
@@ -242,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
     @NotNull
     private BluetoothManager getBluetoothManager() {
-        return Objects.requireNonNull((BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE),"cannot get BluetoothManager");
+        return Objects.requireNonNull((BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE), "cannot get BluetoothManager");
     }
 
     @Override
